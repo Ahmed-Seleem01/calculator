@@ -1,5 +1,6 @@
 :root {
   --color-main-background: #3a4764;
+  --color-calc-background: transparent;
   --color-keypad-background: #232c43;
   --color-screen-background: #182034;
   --color-key-blue-background: #637097;
@@ -13,7 +14,7 @@
   --color-dark-blue-text: #444b5a;
   --color-white-text: #ffffff;
   --border-radius: 10px;
-  --timing-animation: .3s;
+  --timing-animation: 0.3s;
 }
 
 * {
@@ -49,6 +50,7 @@ html {
 }
 .container:has(.themes__toggle--isActive) {
   --color-main-background: #e6e6e6;
+  --color-calc-background: #8b8a8a;
   --color-keypad-background: #d1cccc;
   --color-screen-background: #ededed;
   --color-key-blue-background: #377f86;
@@ -73,6 +75,7 @@ html {
   z-index: 1;
   box-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.4);
   backdrop-filter: blur(5px);
+  background-color: var(--color-calc-background);
 }
 .calc__header {
   display: flex;
@@ -115,7 +118,8 @@ html {
   font-family: inherit;
   font-size: inherit;
 }
-.calc__key:hover:after, .calc__key.hover:after {
+.calc__key:hover:after,
+.calc__key.hover:after {
   background-color: var(--color-white-text);
 }
 .calc__key:active {
@@ -149,38 +153,45 @@ html {
 .calc__key--wide {
   grid-column: span 2;
 }
-.calc [data-type=number] {
+.calc [data-type="number"] {
   font-size: 2.4rem;
 }
-.calc [data-value=Backspace]:hover:after, .calc [data-value=Backspace].hover:after, .calc [data-value=c]:hover:after, .calc [data-value=c].hover:after {
+.calc [data-value="Backspace"]:hover:after,
+.calc [data-value="Backspace"].hover:after,
+.calc [data-value="c"]:hover:after,
+.calc [data-value="c"].hover:after {
   background-color: var(--color-key-blue-hover);
 }
-.calc [data-value=Backspace]:after, .calc [data-value=c]:after {
+.calc [data-value="Backspace"]:after,
+.calc [data-value="c"]:after {
   background-color: var(--color-key-blue-background);
 }
-.calc [data-value=Backspace]:before, .calc [data-value=c]:before {
+.calc [data-value="Backspace"]:before,
+.calc [data-value="c"]:before {
   background-color: var(--color-key-blue-shadow);
 }
-.calc [data-value=Backspace] span, .calc [data-value=c] span {
+.calc [data-value="Backspace"] span,
+.calc [data-value="c"] span {
   color: var(--color-white-text);
 }
-.calc [data-value=Enter]:hover:after, .calc [data-value=Enter].hover:after {
+.calc [data-value="Enter"]:hover:after,
+.calc [data-value="Enter"].hover:after {
   background-color: var(--color-key-red-hover);
 }
-.calc [data-value=Enter]:after {
+.calc [data-value="Enter"]:after {
   background-color: var(--color-key-red-background);
 }
-.calc [data-value=Enter]:before {
+.calc [data-value="Enter"]:before {
   background-color: var(--color-key-red-shadow);
 }
-.calc [data-value=Enter] span {
+.calc [data-value="Enter"] span {
   color: var(--color-white-text);
 }
 
 .themes {
   --toggle-width: 3.5rem;
   --circle-width: 1rem;
-  --toggle-padding: .3rem;
+  --toggle-padding: 0.3rem;
   display: flex;
   gap: 2rem;
   font-size: 1rem;
