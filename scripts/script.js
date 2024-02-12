@@ -1,101 +1,47 @@
+import * as util from './util.js';
+
 const themesToggleElm = document.querySelector('.themes__toggle');
 const keysElements = document.querySelectorAll('.calc__key');
+const result = document.querySelector('.calc__result');
+
+const updateScreen = (value) => {
+  result.textContent = !value ? '0' : value;
+};
 
 const toggleDarkTheme = () => themesToggleElm.classList.toggle('themes__toggle--isActive');
 const toggleDarkThemeByEnter = (event) => event.key === 'Enter' && themesToggleElm.classList.toggle('themes__toggle--isActive');
 
 themesToggleElm.addEventListener('click', toggleDarkTheme);
 themesToggleElm.addEventListener('keydown', toggleDarkThemeByEnter);
-const result = document.querySelector('.calc__result');
-
-let currentNum = '';
-let storedNum = '';
-let operation = '';
-
-const updateScreen = (value) => {
-  result.textContent = !value ? '0' : value;
-};
-
-const numberButtonHandler = (value) => {
-  if (value === '.' && currentNum.includes('.')) return;
-  if (value === '0' && !currentNum) return;
-  // if the user entered num after the operation is finished it will start new calculation
-  if (!currentNum && !operation && storedNum) storedNum = '';
-  currentNum += value;
-  updateScreen(currentNum);
-};
-
-const resetButtonHandler = () => {
-  currentNum = '';
-  storedNum = '';
-  operation = '';
-  updateScreen(currentNum);
-};
-
-const deleteButtonHandler = () => {
-  const numLength = currentNum.length;
-  if (!currentNum || currentNum === '0') return;
-  if (currentNum.length >= 1) currentNum = currentNum.substring(0, numLength - 1);
-  updateScreen(currentNum);
-};
-
-const executeOperation = () => {
-  /* When an operation like subtraction (-),
-  multiplication (*), division (/), or modulus (%)
-  is performed, all the values that are not numbers
-  are converted into the number data type */
-  if (currentNum && storedNum && operation) {
-    switch (operation) {
-      case '+':
-        storedNum = parseFloat(storedNum) + parseFloat(currentNum);
-        break;
-      case '-':
-        storedNum -= currentNum;
-        break;
-      case '*':
-        storedNum *= currentNum;
-        break;
-      case '/':
-        storedNum /= currentNum;
-        break;
-      default:
-    }
-    currentNum = '';
-    operation = '';
-    updateScreen(storedNum);
-  }
-};
-
-const operationButtonHandler = (operationValue) => {
-  if (!currentNum && !storedNum) return;
-  if (currentNum && !storedNum) {
-    storedNum = currentNum;
-    currentNum = '';
-    operation = operationValue;
-  } else if (storedNum) {
-    if (currentNum) executeOperation();
-    operation = operationValue;
-  }
-};
 
 const keyButtonsHandler = (element) => {
   element.addEventListener('click', () => {
     const { type, value } = element.dataset;
     if (type === 'number') {
-      numberButtonHandler(value);
+      const numberValue = util.numberButtonHandler(value);
+      if (numberValue) {
+        updateScreen(numberValue);
+      }
     } else if (type === 'operation') {
+      let buttonValue = '';
       switch (value) {
         case 'c':
-          resetButtonHandler();
+          updateScreen(util.resetButtonHandler());
           break;
         case 'Backspace':
-          deleteButtonHandler();
+          buttonValue = util.deleteButtonHandler();
+          if (buttonValue || buttonValue === '') {
+            updateScreen(buttonValue);
+          }
           break;
         case 'Enter':
-          executeOperation();
+          buttonValue = util.executeOperation(value);
+          if (buttonValue) {
+            updateScreen(buttonValue);
+          }
           break;
         default:
-          operationButtonHandler(value);
+          util.operationButtonHandler(value);
       }
     }
   });
